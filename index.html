@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文藻美語-訊息公告</title>
+    <title>Imgur Image Carousel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body, html {
             margin: 0;
@@ -32,6 +33,7 @@
             max-width: 100%;
             max-height: 100%;
             display: block;
+            object-fit: contain;
         }
         .arrow {
             position: absolute;
@@ -41,6 +43,7 @@
             color: white;
             cursor: pointer;
             user-select: none;
+            z-index: 1;
         }
         .arrow-left {
             left: 10px;
@@ -55,10 +58,11 @@
         <div class="carousel" id="carousel">
             <!-- Images will be inserted here dynamically -->
         </div>
-        <span class="arrow arrow-left" id="prev">&#9664;</span>
-        <span class="arrow arrow-right" id="next">&#9654;</span>
+        <span class="arrow arrow-left" id="prev"><i class="fas fa-chevron-left"></i></span>
+        <span class="arrow arrow-right" id="next"><i class="fas fa-chevron-right"></i></span>
     </div>
 
+    <script src="https://unpkg.com/swipejs@2.2.14/dist/swipe.min.js"></script>
     <script>
         function getQueryParams() {
             let params = {};
@@ -103,6 +107,23 @@
                         carousel.style.transform = `translateX(${-index * 100}%)`;
                     }
                 };
+
+                // SwipeJS initialization
+                let mySwipe = new Swipe(document.querySelector('.carousel-container'), {
+                    startSlide: 0,
+                    speed: 400,
+                    auto: false,
+                    continuous: false,
+                    disableScroll: false,
+                    stopPropagation: false,
+                    callback: function(index, elem) {
+                        carousel.style.transform = `translateX(${-index * 100}%)`;
+                    },
+                    transitionEnd: function(index, elem) {}
+                });
+
+                document.getElementById("prev").onclick = () => mySwipe.prev();
+                document.getElementById("next").onclick = () => mySwipe.next();
             }
         }
 
