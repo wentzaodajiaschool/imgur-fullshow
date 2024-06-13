@@ -3,38 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen Imgur Images</title>
+    <title>文藻訊息-圖片公告</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             background-color: black;
             overflow: hidden;
         }
-        img {
+        .img-container {
+            padding: 5px;
+        }
+        .img-container img {
             max-width: 100%;
             max-height: 100%;
-            margin-bottom: 10px;
-        }
-        .single-image {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .multiple-images {
-            padding: 10px;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div id="image-container"></div>
+    <div id="image-container" class="container-fluid d-flex flex-wrap justify-content-center align-items-center"></div>
 
     <script>
         function getQueryParams() {
@@ -50,26 +41,28 @@
 
         function displayImages() {
             let params = getQueryParams();
-            let container = document.getElementById("image-container");
             if (params.id) {
-                let ids = params.id.split(",");
-                if (ids.length === 1) {
-                    // Single image full screen
-                    container.classList.add("single-image");
-                    let imageUrl = "https://i.imgur.com/" + ids[0] + ".jpg";
-                    let img = document.createElement("img");
-                    img.src = imageUrl;
-                    container.appendChild(img);
-                } else {
-                    // Multiple images with small gaps
-                    container.classList.add("multiple-images");
-                    ids.forEach(id => {
-                        let imageUrl = "https://i.imgur.com/" + id + ".jpg";
-                        let img = document.createElement("img");
-                        img.src = imageUrl;
-                        container.appendChild(img);
-                    });
-                }
+                let imageIds = params.id.split(',');
+                let container = document.getElementById("image-container");
+
+                imageIds.forEach((id, index) => {
+                    let colClass = 'col-12';
+                    if (imageIds.length === 2) {
+                        colClass = 'col-6';
+                    } else if (imageIds.length === 3) {
+                        colClass = 'col-4';
+                    }
+
+                    let imgContainer = document.createElement('div');
+                    imgContainer.className = `img-container ${colClass} p-2`;
+
+                    let img = document.createElement('img');
+                    img.src = "https://i.imgur.com/" + id + ".jpg";
+                    img.alt = "Imgur Image";
+
+                    imgContainer.appendChild(img);
+                    container.appendChild(imgContainer);
+                });
             } else {
                 document.body.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
             }
