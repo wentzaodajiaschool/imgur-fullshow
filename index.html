@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Imgur Image</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'GenSenRounded';
+            src: url('GenSenRounded-R.otf') format('opentype');
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .container-fluid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+            padding: 10px; /* 圖片與上下左右的間隔 */
+        }
+        .img-container {
+            padding: 10px; /* 圖片之間的間隔 */
+            border-radius: 15px; /* 蘋果風格的圓角 */
+            overflow: hidden;
+        }
+        .img-container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 15px; /* 圓角 */
+        }
+        .title {
+            padding: 10px 20px; /* 增加左右空白 */
+            color: #FFF;
+            font-size: 2em;
+            text-align: left;
+            font-family: 'GenSenRounded', sans-serif;
+            background-color: #2D3E2F; /* 背景顏色 */
+            border-radius: 30px; /* 圓角 */
+            margin-bottom: 10px; /* 與圖片間的間隔 */
+            width: fit-content;
+            max-width: 100%;
+        }
+        .title-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            padding: 10px; /* 與圖片一致的間隔 */
+        }
+        @media (max-width: 767px) {
+            .container-fluid {
+                align-items: flex-start;
+            }
+            .title-container {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="image-container" class="container-fluid"></div>
+
+    <script>
+        function getQueryParams() {
+            let params = {};
+            let queryString = window.location.search.substring(1);
+            let regex = /([^&=]+)=([^&]*)/g;
+            let m;
+            while (m = regex.exec(queryString)) {
+                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            return params;
+        }
+
+        function displayImages() {
+            let params = getQueryParams();
+            let container = document.getElementById("image-container");
+
+            if (params.title) {
+                let titleContainer = document.createElement('div');
+                titleContainer.className = 'title-container';
+                
+                let title = document.createElement('div');
+                title.className = 'title';
+                title.innerText = params.title;
+
+                titleContainer.appendChild(title);
+                container.appendChild(titleContainer);
+            }
+
+            if (params.id) {
+                let imageIds = params.id.split(',');
+
+                imageIds.forEach((id, index) => {
+                    let colClass = 'col-12';
+                    if (imageIds.length === 2) {
+                        colClass = 'col-sm-6 col-12';
+                    } else if (imageIds.length >= 3) {
+                        colClass = 'col-sm-4 col-12';
+                    }
+
+                    let imgContainer = document.createElement('div');
+                    imgContainer.className = `img-container ${colClass}`;
+
+                    let img = document.createElement('img');
+                    img.src = "https://i.imgur.com/" + id + ".jpg";
+                    img.alt = "Imgur Image";
+
+                    imgContainer.appendChild(img);
+                    container.appendChild(imgContainer);
+                });
+            } else {
+                container.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
+            }
+        }
+
+        displayImages();
+    </script>
+</body>
+</html>
