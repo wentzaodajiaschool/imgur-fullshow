@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文藻美語訊息公告</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            overflow: hidden;
+        }
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <img id="imgur-image" src="" alt="Imgur Image">
+
+    <script>
+        function getQueryParams() {
+            let params = {};
+            let queryString = window.location.search.substring(1);
+            let regex = /([^&=]+)=([^&]*)/g;
+            let m;
+            while (m = regex.exec(queryString)) {
+                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            return params;
+        }
+
+        function displayImage() {
+            let params = getQueryParams();
+            if (params.id) {
+                let imageUrl = "https://i.imgur.com/" + params.id + ".jpg";
+                document.getElementById("imgur-image").src = imageUrl;
+            } else {
+                document.body.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
+            }
+        }
+
+        displayImage();
+    </script>
+</body>
+</html>
