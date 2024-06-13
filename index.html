@@ -104,12 +104,7 @@
                 let imageIds = params.id.split(',');
 
                 imageIds.forEach((id, index) => {
-                    let colClass = 'col-12';
-                    if (imageIds.length === 2) {
-                        colClass = 'col-sm-6 col-12';
-                    } else if (imageIds.length >= 3) {
-                        colClass = 'col-sm-4 col-12';
-                    }
+                    let colClass = 'col-12 col-lg-4 col-md-6';
 
                     let imgContainer = document.createElement('div');
                     imgContainer.className = `img-container ${colClass}`;
