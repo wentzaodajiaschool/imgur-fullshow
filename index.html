@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imgur Image Carousel2</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>文藻美語-圖片公告</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body, html {
             margin: 0;
@@ -21,20 +21,17 @@
             position: relative;
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
         }
         .carousel {
             display: flex;
             transition: transform 0.5s ease-in-out;
+            width: 100%;
         }
         .carousel img {
-            width: auto;
-            height: auto;
-            max-width: 100%;
+            width: 100%; /* Ensure the image takes the width of the container */
+            height: auto; /* Maintain the aspect ratio */
             max-height: 100%;
-            display: block;
         }
         .arrow {
             position: absolute;
@@ -44,7 +41,7 @@
             color: white;
             cursor: pointer;
             user-select: none;
-            z-index: 1;
+            z-index: 1000;
         }
         .arrow-left {
             left: 10px;
@@ -63,7 +60,7 @@
         <span class="arrow arrow-right" id="next"><i class="fas fa-chevron-right"></i></span>
     </div>
 
-    <script src="https://unpkg.com/@lyfeyaj/swipe@latest/swipe.min.js"></script>
+    <script src="https://unpkg.com/swipejs"></script>
     <script>
         function getQueryParams() {
             let params = {};
@@ -83,7 +80,7 @@
                 document.body.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
                 return;
             }
-            
+
             let carousel = document.getElementById("carousel");
             ids.forEach(id => {
                 let img = document.createElement("img");
@@ -91,26 +88,28 @@
                 carousel.appendChild(img);
             });
 
+            let swipe = new Swipe(document.getElementById('carousel'), {
+                startSlide: 0,
+                speed: 400,
+                auto: false,
+                continuous: true,
+                disableScroll: false,
+                stopPropagation: false,
+                callback: function(index, elem) {},
+                transitionEnd: function(index, elem) {}
+            });
+
+            document.getElementById("prev").addEventListener('click', function() {
+                swipe.prev();
+            });
+
+            document.getElementById("next").addEventListener('click', function() {
+                swipe.next();
+            });
+
             if (ids.length === 1) {
                 document.getElementById("prev").style.display = "none";
                 document.getElementById("next").style.display = "none";
-            } else {
-                let index = 0;
-                let swipe = new Swipe(document.querySelector('.carousel-container'), {
-                    startSlide: 0,
-                    speed: 400,
-                    auto: false,
-                    continuous: false,
-                    disableScroll: false,
-                    stopPropagation: false,
-                    callback: function(index, elem) {
-                        carousel.style.transform = `translateX(${-index * 100}%)`;
-                    },
-                    transitionEnd: function(index, elem) {}
-                });
-
-                document.getElementById("prev").onclick = () => swipe.prev();
-                document.getElementById("next").onclick = () => swipe.next();
             }
         }
 
