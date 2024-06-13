@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文藻美語-圖片公告</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <title>Fullscreen Imgur Images</title>
     <style>
         body, html {
             margin: 0;
@@ -12,55 +11,31 @@
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background-color: black;
             overflow: hidden;
         }
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        .carousel {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-            width: 100%;
-        }
-        .carousel img {
-            width: 100%; /* Ensure the image takes the width of the container */
-            height: auto; /* Maintain the aspect ratio */
+        img {
+            max-width: 100%;
             max-height: 100%;
+            margin-bottom: 10px;
         }
-        .arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2em;
-            color: white;
-            cursor: pointer;
-            user-select: none;
-            z-index: 1000;
+        .single-image {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .arrow-left {
-            left: 10px;
-        }
-        .arrow-right {
-            right: 10px;
+        .multiple-images {
+            padding: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="carousel-container">
-        <div class="carousel" id="carousel">
-            <!-- Images will be inserted here dynamically -->
-        </div>
-        <span class="arrow arrow-left" id="prev"><i class="fas fa-chevron-left"></i></span>
-        <span class="arrow arrow-right" id="next"><i class="fas fa-chevron-right"></i></span>
-    </div>
+    <div id="image-container"></div>
 
-    <script src="https://unpkg.com/swipejs"></script>
     <script>
         function getQueryParams() {
             let params = {};
@@ -75,41 +50,28 @@
 
         function displayImages() {
             let params = getQueryParams();
-            let ids = params.id ? params.id.split(',') : [];
-            if (ids.length === 0) {
+            let container = document.getElementById("image-container");
+            if (params.id) {
+                let ids = params.id.split(",");
+                if (ids.length === 1) {
+                    // Single image full screen
+                    container.classList.add("single-image");
+                    let imageUrl = "https://i.imgur.com/" + ids[0] + ".jpg";
+                    let img = document.createElement("img");
+                    img.src = imageUrl;
+                    container.appendChild(img);
+                } else {
+                    // Multiple images with small gaps
+                    container.classList.add("multiple-images");
+                    ids.forEach(id => {
+                        let imageUrl = "https://i.imgur.com/" + id + ".jpg";
+                        let img = document.createElement("img");
+                        img.src = imageUrl;
+                        container.appendChild(img);
+                    });
+                }
+            } else {
                 document.body.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
-                return;
-            }
-
-            let carousel = document.getElementById("carousel");
-            ids.forEach(id => {
-                let img = document.createElement("img");
-                img.src = "https://i.imgur.com/" + id + ".jpg";
-                carousel.appendChild(img);
-            });
-
-            let swipe = new Swipe(document.getElementById('carousel'), {
-                startSlide: 0,
-                speed: 400,
-                auto: false,
-                continuous: true,
-                disableScroll: false,
-                stopPropagation: false,
-                callback: function(index, elem) {},
-                transitionEnd: function(index, elem) {}
-            });
-
-            document.getElementById("prev").addEventListener('click', function() {
-                swipe.prev();
-            });
-
-            document.getElementById("next").addEventListener('click', function() {
-                swipe.next();
-            });
-
-            if (ids.length === 1) {
-                document.getElementById("prev").style.display = "none";
-                document.getElementById("next").style.display = "none";
             }
         }
 
