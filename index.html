@@ -133,6 +133,7 @@
 <body>
     <div id="image-container" class="container-fluid"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <script>
         function getQueryParams() {
             let params = {};
@@ -144,11 +145,11 @@
             }
             return params;
         }
-
-        function decodeBase64(data) {
-            return atob(data);
+    
+        function decompressData(data) {
+            return LZString.decompressFromEncodedURIComponent(data);
         }
-
+    
         function parseDecodedParams(data) {
             let params = {};
             let regex = /([^&=]+)=([^&]*)/g;
@@ -158,61 +159,61 @@
             }
             return params;
         }
-
+    
         function formatDateString(dateString) {
             if (dateString.length === 8) {
                 return dateString.slice(0, 4) + '/' + dateString.slice(4, 6) + '/' + dateString.slice(6, 8);
             }
             return dateString;
         }
-
+    
         function displayImages() {
             let params = getQueryParams();
             if (params.data) {
-                let decodedData = decodeBase64(params.data);
-                params = parseDecodedParams(decodedData);
+                let decompressedData = decompressData(params.data);
+                params = parseDecodedParams(decompressedData);
             }
-
+    
             let container = document.getElementById("image-container");
-
+    
             if (params.title) {
                 let titleContainer = document.createElement('div');
                 titleContainer.className = 'title-container';
-
+                
                 let title = document.createElement('div');
                 title.className = 'title';
                 title.innerText = params.title;
-
+    
                 titleContainer.appendChild(title);
                 container.appendChild(titleContainer);
             }
-
+    
             if (params.date) {
                 let formattedDate = formatDateString(params.date);
                 let dateContainer = document.createElement('div');
                 dateContainer.className = 'date-container';
-
+                
                 let date = document.createElement('div');
                 date.className = 'date';
                 date.innerText = formattedDate;
-
+    
                 dateContainer.appendChild(date);
                 container.appendChild(dateContainer);
             }
-
+    
             if (params.id) {
                 let imageIds = params.id.split(',');
-
+    
                 imageIds.forEach((id, index) => {
                     let colClass = 'col-12 col-lg-4 col-md-6';
-
+    
                     let imgContainer = document.createElement('div');
                     imgContainer.className = `img-container ${colClass}`;
-
+    
                     let img = document.createElement('img');
                     img.src = "https://i.imgur.com/" + id + ".jpg";
                     img.alt = "Imgur Image";
-
+    
                     imgContainer.appendChild(img);
                     container.appendChild(imgContainer);
                 });
@@ -220,9 +221,10 @@
                 container.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
             }
         }
-
+    
         displayImages();
     </script>
+    
 </body>
 
 </html>
