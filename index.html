@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,9 @@
             font-family: 'GenSenRounded';
             src: url('GenSenRounded-R.otf') format('opentype');
         }
-        body, html {
+
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -22,82 +25,111 @@
             justify-content: center;
             font-family: 'Noto Sans TC', sans-serif;
         }
+
         .container-fluid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             min-height: 100%;
-            padding: 10px; /* 圖片與上下左右的間隔 */
+            padding: 10px;
+            /* 圖片與上下左右的間隔 */
         }
+
         .img-container {
-            padding: 10px; /* 圖片之間的間隔 */
-            border-radius: 15px; /* 蘋果風格的圓角 */
+            padding: 10px;
+            /* 圖片之間的間隔 */
+            border-radius: 15px;
+            /* 蘋果風格的圓角 */
             overflow: hidden;
         }
+
         .img-container img {
             display: block;
             width: 100%;
             height: auto;
-            border-radius: 15px; /* 圓角 */
+            border-radius: 15px;
+            /* 圓角 */
         }
-        .title, .date {
-            padding: 10px 20px; /* 增加左右空白 */
-            border-radius: 30px; /* 圓角 */
+
+        .title,
+        .date {
+            padding: 10px 20px;
+            /* 增加左右空白 */
+            border-radius: 30px;
+            /* 圓角 */
             width: fit-content;
             max-width: 100%;
         }
+
         .title {
             color: #FFF;
             font-size: 2em;
             text-align: left;
             font-family: 'GenSenRounded', sans-serif;
-            background-color: #2D3E2F; /* 背景顏色 */
-            margin-bottom: 5px; /* 與日期間的間隔 */
+            background-color: #2D3E2F;
+            /* 背景顏色 */
+            margin-bottom: 5px;
+            /* 與日期間的間隔 */
         }
+
         .date {
             color: #000;
             font-size: 0.8em;
             text-align: right;
             font-family: 'GenSenRounded', sans-serif;
-            background-color: #dfecdb; /* 背景顏色 */
-            padding: 5px 15px; /* 增加左右空白 */
-            border-radius: 30px; /* 圓角 */
+            background-color: #dfecdb;
+            /* 背景顏色 */
+            padding: 5px 15px;
+            /* 增加左右空白 */
+            border-radius: 30px;
+            /* 圓角 */
             width: fit-content;
             max-width: 100%;
         }
-        .title-container, .date-container {
+
+        .title-container,
+        .date-container {
             width: 100%;
             display: flex;
-            padding: 10px; /* 與圖片一致的間隔 */
+            padding: 10px;
+            /* 與圖片一致的間隔 */
         }
+
         .title-container {
             justify-content: center;
         }
+
         .date-container {
             justify-content: center;
             margin-left: auto;
-            transform: translateX(10%); /* 向右偏移 */
+            transform: translateX(10%);
+            /* 向右偏移 */
             margin-top: -3%;
         }
+
         @media (max-width: 767px) {
             .container-fluid {
                 align-items: center;
             }
+
             .title-container {
                 justify-content: center;
             }
+
             .date-container {
                 justify-content: end;
                 transform: translateX(0);
                 margin-top: -10%;
             }
+
             .date {
                 font-size: 1em;
             }
         }
     </style>
 </head>
+
 <body>
     <div id="image-container" class="container-fluid"></div>
 
@@ -113,6 +145,20 @@
             return params;
         }
 
+        function decodeBase64(data) {
+            return atob(data);
+        }
+
+        function parseDecodedParams(data) {
+            let params = {};
+            let regex = /([^&=]+)=([^&]*)/g;
+            let m;
+            while (m = regex.exec(data)) {
+                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            return params;
+        }
+
         function formatDateString(dateString) {
             if (dateString.length === 8) {
                 return dateString.slice(0, 4) + '/' + dateString.slice(4, 6) + '/' + dateString.slice(6, 8);
@@ -122,12 +168,17 @@
 
         function displayImages() {
             let params = getQueryParams();
+            if (params.data) {
+                let decodedData = decodeBase64(params.data);
+                params = parseDecodedParams(decodedData);
+            }
+
             let container = document.getElementById("image-container");
 
             if (params.title) {
                 let titleContainer = document.createElement('div');
                 titleContainer.className = 'title-container';
-                
+
                 let title = document.createElement('div');
                 title.className = 'title';
                 title.innerText = params.title;
@@ -140,7 +191,7 @@
                 let formattedDate = formatDateString(params.date);
                 let dateContainer = document.createElement('div');
                 dateContainer.className = 'date-container';
-                
+
                 let date = document.createElement('div');
                 date.className = 'date';
                 date.innerText = formattedDate;
@@ -173,4 +224,5 @@
         displayImages();
     </script>
 </body>
+
 </html>
