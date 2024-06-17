@@ -16,6 +16,10 @@
                     const context = liff.getContext();
                     alert("Context type: " + context.type);
 
+                    // 取得使用者資料範例
+                    const profile = await liff.getProfile();
+                    alert(`Hello, ${profile.displayName}`);
+
                     if (context.type === 'utou' || context.type === 'room' || context.type === 'group') {
                         const params = getQueryParams();
                         alert("Query Params: " + JSON.stringify(params));
