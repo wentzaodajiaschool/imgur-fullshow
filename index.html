@@ -164,21 +164,6 @@
             return params;
         }
 
-        function extractLiffStateData(state) {
-            let params = {};
-            let regex = /liff\.state=([^&]*)/;
-            let match = state.match(regex);
-            if (match) {
-                let decodedData = decodeURIComponent(match[1]);
-                let stateParams = decodedData.split('&');
-                stateParams.forEach(param => {
-                    let [key, value] = param.split('=');
-                    params[decodeURIComponent(key)] = decodeURIComponent(value);
-                });
-            }
-            return params;
-        }
-
         function formatDateString(dateString) {
             if (dateString.length === 8) {
                 return dateString.slice(0, 4) + '/' + dateString.slice(4, 6) + '/' + dateString.slice(6, 8);
@@ -188,18 +173,9 @@
 
         function displayImages() {
             let params = getQueryParams();
-
             if (params.data) {
                 let decompressedData = decompressData(params.data);
                 params = parseDecodedParams(decompressedData);
-            }
-
-            if (params['liff.state']) {
-                let liffParams = extractLiffStateData(params['liff.state']);
-                if (liffParams.data) {
-                    let decompressedData = decompressData(liffParams.data);
-                    params = parseDecodedParams(decompressedData);
-                }
             }
 
             let container = document.getElementById("image-container");
