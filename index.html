@@ -138,7 +138,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
         function getQueryParams() {
             let params = {};
@@ -172,7 +171,13 @@
             return dateString;
         }
 
-        function displayImages(params) {
+        function displayImages() {
+            let params = getQueryParams();
+            if (params.data) {
+                let decompressedData = decompressData(params.data);
+                params = parseDecodedParams(decompressedData);
+            }
+
             let container = document.getElementById("image-container");
 
             if (params.title) {
@@ -224,40 +229,7 @@
             }
         }
 
-        async function main() {
-            try {
-                await liff.init({ liffId: "1660786685-j636WZpM" });
-                alert("LIFF initialized successfully");
-
-                if (liff.isInClient()) {
-                    const context = liff.getContext();
-                    alert("Context type: " + context.type);
-                    
-                    // 取得使用者資料範例
-                    const profile = await liff.getProfile();
-                    alert(`Hello, ${profile.displayName}`);
-
-                    const params = context.type === 'utou' || context.type === 'room' || context.type === 'group' ? getQueryParams() : {};
-                    displayImages(params);
-                } else {
-                    const params = getQueryParams();
-                    if (params.data) {
-                        alert("Compressed Data: " + params.data);
-                        const decompressedData = decompressData(params.data);
-                        alert("Decompressed Data: " + decompressedData);
-                        displayImages(parseDecodedParams(decompressedData));
-                    } else {
-                        displayImages(params);
-                    }
-                }
-            } catch (error) {
-                alert("LIFF initialization failed: " + error);
-                const params = getQueryParams();
-                displayImages(params);
-            }
-        }
-
-        window.onload = main;
+        displayImages();
     </script>
 </body>
 
