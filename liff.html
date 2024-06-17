@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFF Example</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        async function main() {
+            try {
+                await liff.init({ liffId: "1660786685-j636WZpM" });
+                alert("LIFF initialized successfully");
+
+                if (liff.isInClient()) {
+                    const context = liff.getContext();
+                    alert("Context type: " + context.type);
+
+                    if (context.type === 'utou' || context.type === 'room' || context.type === 'group') {
+                        const params = getQueryParams();
+                        alert("Query Params: " + JSON.stringify(params));
+                        displayParams(params);
+                    }
+                } else {
+                    const params = getQueryParams();
+                    alert("Query Params: " + JSON.stringify(params));
+                    displayParams(params);
+                }
+            } catch (error) {
+                alert("LIFF initialization failed: " + error);
+            }
+        }
+
+        function getQueryParams() {
+            let params = {};
+            let queryString = window.location.search.substring(1);
+            let regex = /([^&=]+)=([^&]*)/g;
+            let m;
+            while (m = regex.exec(queryString)) {
+                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            return params;
+        }
+
+        function displayParams(params) {
+            const container = document.getElementById("content");
+            container.innerHTML = "<h1>Query Params</h1><pre>" + JSON.stringify(params, null, 2) + "</pre>";
+        }
+
+        window.onload = main;
+    </script>
+</head>
+
+<body>
+    <div id="content" style="padding: 20px;"></div>
+</body>
+
+</html>
