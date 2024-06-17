@@ -176,7 +176,7 @@
             let container = document.getElementById("image-container");
 
             if (params.title) {
-                // 修改網頁的title
+                alert("Title: " + params.title); // Debugging alert
                 document.title = params.title;
 
                 let titleContainer = document.createElement('div');
@@ -204,6 +204,7 @@
             }
 
             if (params.id) {
+                alert("Image IDs: " + params.id); // Debugging alert
                 let imageIds = params.id.split(',');
 
                 imageIds.forEach((id, index) => {
@@ -225,20 +226,27 @@
         }
 
         async function main() {
-            await liff.init({ liffId: "1660786685-j636WZpM" });
+            try {
+                await liff.init({ liffId: "1660786685-j636WZpM" });
+                alert("LIFF initialized successfully"); // Debugging alert
 
-            if (liff.isInClient()) {
-                const context = liff.getContext();
-                const params = context.type === 'utou' || context.type === 'room' || context.type === 'group' ? getQueryParams() : {};
-                displayImages(params);
-            } else {
-                const params = getQueryParams();
-                if (params.data) {
-                    const decompressedData = decompressData(params.data);
-                    displayImages(parseDecodedParams(decompressedData));
-                } else {
+                if (liff.isInClient()) {
+                    const context = liff.getContext();
+                    const params = context.type === 'utou' || context.type === 'room' || context.type === 'group' ? getQueryParams() : {};
                     displayImages(params);
+                } else {
+                    const params = getQueryParams();
+                    if (params.data) {
+                        alert("Compressed Data: " + params.data); // Debugging alert
+                        const decompressedData = decompressData(params.data);
+                        alert("Decompressed Data: " + decompressedData); // Debugging alert
+                        displayImages(parseDecodedParams(decompressedData));
+                    } else {
+                        displayImages(params);
+                    }
                 }
+            } catch (error) {
+                alert("LIFF initialization failed: " + error); // Debugging alert
             }
         }
 
