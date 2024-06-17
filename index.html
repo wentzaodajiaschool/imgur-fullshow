@@ -108,8 +108,9 @@
             .date {
                 font-size: 1em;
             }
+
             .title {
-                font-size: 2.5em;
+                font-size: 2em;
             }
         }
 
@@ -176,6 +177,9 @@
             let container = document.getElementById("image-container");
 
             if (params.title) {
+                // 修改網頁的title
+                document.title = params.title;
+
                 let titleContainer = document.createElement('div');
                 titleContainer.className = 'title-container';
 
