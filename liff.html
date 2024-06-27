@@ -284,6 +284,10 @@
             } else {
                 container.innerHTML = "<h1 style='color:white'>No image ID provided in the URL</h1>";
             }
+
+            // 設定footer的顏色
+            const footer = document.getElementById('footer');
+            footer.style.backgroundColor = params.primaryColor || '#2D3E2F';
         }
 
         window.onload = main;
