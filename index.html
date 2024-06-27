@@ -177,12 +177,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <script>
-
-        window.onload = function () {
-            const height = document.body.scrollHeight;
-            parent.postMessage({ height: height }, "*");
-        };
-        
         async function main() {
             try {
                 await liff.init({ liffId: "1660786685-j636WZpM" });
@@ -203,6 +197,8 @@
                 document.getElementById("loading-spinner").style.display = "none";
                 document.getElementById("content").style.display = "block";
                 document.getElementById("footer").style.display = "block";
+                const height = document.body.scrollHeight;
+                parent.postMessage({ height: height }, "*");
             }
         }
 
