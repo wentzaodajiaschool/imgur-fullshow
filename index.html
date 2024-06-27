@@ -50,6 +50,9 @@
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s ease-out forwards;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         @keyframes fadeInUp {
@@ -299,19 +302,19 @@
     <style>
         @media (min-width: 992px) {
             .small-image {
-                width: 30%;
+                width: 30% !important;
             }
         }
 
         @media (max-width: 991px) and (min-width: 768px) {
             .small-image {
-                width: 40%;
+                width: 40% !important;
             }
         }
 
         @media (max-width: 767px) {
             .small-image {
-                width: 100%;
+                width: 100% !important;
             }
         }
     </style>
