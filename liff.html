@@ -157,6 +157,21 @@
         .loading-spinner i {
             font-size: 3em;
         }
+
+        .img-size-1 {
+            width: 30%;
+        }
+
+        .img-size-2 {
+            width: 50%;
+        }
+
+        @media (max-width: 767px) {
+            .img-size-1,
+            .img-size-2 {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -268,28 +283,28 @@
 
             if (params.id) {
                 let imageIds = params.id.split(',');
-                let colClass;
+                let imgClass;
 
                 switch (parseInt(params.imageCount)) {
                     case 1:
-                        colClass = 'col-12';
+                        imgClass = 'img-size-1';
                         break;
                     case 2:
-                        colClass = 'col-6';
+                        imgClass = 'img-size-2';
                         break;
                     case 3:
-                        colClass = 'col-4';
+                        imgClass = 'col-md-4';
                         break;
                     case 4:
-                        colClass = 'col-3';
+                        imgClass = 'col-md-3';
                         break;
                     default:
-                        colClass = 'col-12';
+                        imgClass = 'img-size-1';
                 }
 
                 imageIds.forEach((id) => {
                     let imgContainer = document.createElement('div');
-                    imgContainer.className = `img-container ${colClass}`;
+                    imgContainer.className = `img-container ${imgClass}`;
 
                     let img = document.createElement('img');
                     img.src = "https://i.imgur.com/" + id + ".jpg";
