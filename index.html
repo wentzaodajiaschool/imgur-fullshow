@@ -194,7 +194,12 @@
             } catch (error) {
                 const params = getQueryParams();
                 displayParams(params);
-                console.error("No LIFF initialization" + error);
+                // console.error("No LIFF initialization" + error);
+                document.getElementById("loading-spinner").style.display = "none";
+                document.getElementById("content").style.display = "block";
+                document.getElementById("footer").style.display = "block";
+                const height = document.body.scrollHeight;
+                parent.postMessage({ height: height }, "*");
             } finally {
                 document.getElementById("loading-spinner").style.display = "none";
                 document.getElementById("content").style.display = "block";
