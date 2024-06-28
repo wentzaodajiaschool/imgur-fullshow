@@ -192,22 +192,20 @@
                     displayParams(params);
                 }
             } catch (error) {
+                // 即使LIFF初始化失败，依然执行功能
                 const params = getQueryParams();
                 displayParams(params);
-                // console.error("No LIFF initialization" + error);
-                document.getElementById("loading-spinner").style.display = "none";
-                document.getElementById("content").style.display = "block";
-                document.getElementById("footer").style.display = "block";
-                const height = document.body.scrollHeight;
-                parent.postMessage({ height: height }, "*");
             } finally {
+                // 隐藏加载动画，显示内容
                 document.getElementById("loading-spinner").style.display = "none";
                 document.getElementById("content").style.display = "block";
                 document.getElementById("footer").style.display = "block";
+                // 通知父窗口更新高度
                 const height = document.body.scrollHeight;
                 parent.postMessage({ height: height }, "*");
             }
         }
+
 
         function getQueryParams() {
             let params = {};
